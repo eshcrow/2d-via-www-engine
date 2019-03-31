@@ -8,13 +8,13 @@
                 <div class="card-header">Nowa postać</div>
 
                 <div class="card-body">
-                    @if (session('status'))
+                    @if (session('character_create_success'))
                         <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
+                            {{ session('character_create_success') }}
                         </div>
                     @endif
 
-                    <form method="post" action="">
+                    <form method="post" action="{{ route('character.create') }}">
                         @csrf
 
                         <div class="form-group row">
@@ -36,19 +36,19 @@
 
                             <div class="col-md-6">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="gender" id="man" value="option1" checked>
+                                    <input class="form-check-input" type="radio" name="gender" id="man" value="0" checked>
                                     <label class="form-check-label" for="man">
                                         Mężczyzna
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="gender" id="woman" value="option2">
+                                    <input class="form-check-input" type="radio" name="gender" id="woman" value="1">
                                     <label class="form-check-label" for="woman">
                                         Kobieta
                                     </label>
                                 </div>
                                 <div class="form-check disabled">
-                                    <input class="form-check-input" type="radio" name="gender" id="idk" value="option3" disabled>
+                                    <input class="form-check-input" type="radio" name="gender" id="idk" value="2" disabled>
                                     <label class="form-check-label" for="idk">
                                         Nie wiem
                                     </label>
@@ -59,14 +59,8 @@
                         <div class="form-group row mb-0">
                             <div class="col-md-8 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
-                                    {{ __('Login') }}
+                                    Stwórz
                                 </button>
-
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                @endif
                             </div>
                         </div>
                     </form>

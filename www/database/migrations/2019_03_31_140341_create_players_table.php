@@ -21,7 +21,7 @@ class CreatePlayersTable extends Migration
             $table->integer('map_id');
             $table->integer('x');
             $table->integer('y');
-            $table->char('auth_token', 100);
+            $table->char('auth_token', 100)->nullable();
             $table->timestamp('last_action')->nullable();
             $table->timestamps();
         });

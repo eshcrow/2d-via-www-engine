@@ -22,3 +22,9 @@ Route::get('/character', [
     'as' => 'character',
     'middleware' => ['auth']
 ]);
+
+Route::post('/character/create', [
+    'uses' => '\App\Http\Controllers\CharacterController@create',
+    'as' => 'character.create',
+    'middleware' => ['auth']
+]);
