@@ -1,0 +1,9 @@
+Options -Indexes
+RewriteEngine on
+RewriteCond %{REQUEST_URI} !^public
+RewriteRule ^(.*)$ public/$1 [L]
+
+<Files .env>
+    Order allow,deny
+    Deny from all
+</Files>
