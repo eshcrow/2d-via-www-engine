@@ -1,5 +1,6 @@
 Options -Indexes
 RewriteEngine on
+RewriteCond %{REQUEST_URI} !^/engines/redirect_engine.php
 RewriteCond %{REQUEST_URI} !^public
 RewriteRule ^(.*)$ public/$1 [L]
 

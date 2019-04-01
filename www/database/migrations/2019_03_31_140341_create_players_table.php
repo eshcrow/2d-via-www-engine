@@ -22,7 +22,7 @@ class CreatePlayersTable extends Migration
             $table->integer('x');
             $table->integer('y');
             $table->char('auth_token', 100)->nullable();
-            $table->timestamp('last_action')->nullable();
+            $table->integer('last_action', 20)->nullable();
             $table->timestamps();
         });
     }

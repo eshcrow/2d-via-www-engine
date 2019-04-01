@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Models\Character;
 
 class HomeController extends Controller
 {
@@ -21,8 +23,8 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
-    {
-        return view('home');
+    public function index(): object {
+        return view('home')
+                ->with("characters", Character::where("user_id", "=", Auth::user()->id)->orderBy("lvl", "desc")->get());
     }
 }

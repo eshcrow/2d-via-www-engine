@@ -28,3 +28,27 @@ Route::post('/character/create', [
     'as' => 'character.create',
     'middleware' => ['auth']
 ]);
+
+Route::get('/character/edit/{character_id}', [
+    'uses' => '\App\Http\Controllers\CharacterController@editView',
+    'as' => 'character.edit',
+    'middleware' => ['auth']
+]);
+
+Route::post('/character/edit/{character_id}', [
+    'uses' => '\App\Http\Controllers\CharacterController@editSave',
+    'as' => 'character.edit.save',
+    'middleware' => ['auth']
+]);
+
+Route::get('/enter_game/{character_id}/{token}', [
+    'uses' => '\App\Http\Controllers\GameController@enter',
+    'as' => 'game.enter',
+    'middleware' => ['auth']
+]);
+
+Route::get('/game', [
+    'uses' => '\App\Http\Controllers\GameController@renderClient',
+    'as' => 'game.render',
+    'middleware' => ['auth']
+]);

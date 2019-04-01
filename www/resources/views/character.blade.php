@@ -47,12 +47,6 @@
                                         Kobieta
                                     </label>
                                 </div>
-                                <div class="form-check disabled">
-                                    <input class="form-check-input" type="radio" name="gender" id="idk" value="2" disabled>
-                                    <label class="form-check-label" for="idk">
-                                        Nie wiem
-                                    </label>
-                                </div>
                             </div>
                         </div>
 
@@ -75,13 +69,41 @@
                 <div class="card-header">Istniejące postacie</div>
 
                 <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
+                    @if (session('character_no_exists'))
+                        <div class="alert alert-danger" role="alert">
+                            {{ session('character_no_exists') }}
                         </div>
                     @endif
 
-                    You are logged in!
+
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Nick</th>
+                                <th scope="col">Poziom</th>
+                                <th scope="col">Edytuj</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach ($characters as $character)
+                                <tr>
+                                    <td>
+                                        <div id="hero" style="background: url('{{ $character->getOutfit() }}')"></div>
+                                    </td>
+                                    <td>{{ $character->getNick() }}</td>
+                                    <td>{{ $character->getLvl() }}</td>
+                                    <td>
+                                        <a href="{{ route('character.edit', ['character_id' => $character->getId()]) }}">
+                                            Edytuj
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endforeach
+
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
