@@ -23,12 +23,12 @@ public class HttpServer implements Runnable {
 
         openServerSocket();
 
-        while (!isStopped()) {
+        while (!this.isStopped) {
             Socket clientSocket = null;
             try {
                 clientSocket = this.serverSocket.accept();
             } catch (IOException e) {
-                if (isStopped()) {
+                if (this.isStopped) {
                     System.out.println("Server Stopped.") ;
                     return;
                 }
@@ -40,10 +40,6 @@ public class HttpServer implements Runnable {
         }
         System.out.println("Server Stopped.") ;
 
-    }
-
-    private synchronized boolean isStopped () {
-        return this.isStopped;
     }
 
     public synchronized void stop(){
