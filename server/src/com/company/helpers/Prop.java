@@ -1,10 +1,10 @@
 package com.company.helpers;
 
-import java.io.File;
-import java.io.InputStream;
-import java.util.Properties;
-import java.io.IOException;
 import java.io.FileInputStream;
+import java.util.Properties;
+import java.io.InputStream;
+import java.io.IOException;
+import java.io.File;
 import java.net.URL;
 
 public class Prop {

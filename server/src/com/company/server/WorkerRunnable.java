@@ -11,6 +11,7 @@ public class WorkerRunnable implements Runnable {
 
     protected Socket clientSocket = null;
     protected String serverText = null;
+    protected HttpRequest httpRequest;
 
     public WorkerRunnable (Socket clientSocket, String serverText) {
         this.clientSocket = clientSocket;
@@ -23,15 +24,18 @@ public class WorkerRunnable implements Runnable {
             InputStream input = clientSocket.getInputStream();
             OutputStream output = clientSocket.getOutputStream();
             BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            String inputLine;
+
+//            String inputLine;
             long time = System.currentTimeMillis();
+
             output.write(("HTTP/1.1 200 OK\n\nWorkerRunnable: " + this.serverText + " - " + time + "").getBytes());
-            System.out.println(in.readLine());
+            this.httpRequest = new HttpRequest(in);
+
 //            while (!(inputLine = in.readLine()).equals(""))
 //                System.out.println(inputLine);
-            in.close();
-            output.close();
+//            in.close();
             input.close();
+            output.close();
             System.out.println("Request processed: " + time);
         } catch (IOException e) {
             e.printStackTrace();
