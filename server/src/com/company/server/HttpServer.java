@@ -3,7 +3,6 @@ package com.company.server;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.IOException;
-import com.company.server.WorkerRunnable;
 
 public class HttpServer implements Runnable {
 
