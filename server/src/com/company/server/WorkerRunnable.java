@@ -21,20 +21,14 @@ public class WorkerRunnable implements Runnable {
     @Override
     public void run() {
         try {
-            InputStream input = clientSocket.getInputStream();
             OutputStream output = clientSocket.getOutputStream();
-            BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            BufferedReader input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-//            String inputLine;
             long time = System.currentTimeMillis();
-
+            this.httpRequest = new HttpRequest(input);
             output.write(("HTTP/1.1 200 OK\n\nWorkerRunnable: " + this.serverText + " - " + time + "").getBytes());
-            this.httpRequest = new HttpRequest(in);
 
-//            while (!(inputLine = in.readLine()).equals(""))
-//                System.out.println(inputLine);
-//            in.close();
-            input.close();
+            this.httpRequest.inputStreamClose();
             output.close();
             System.out.println("Request processed: " + time);
         } catch (IOException e) {
