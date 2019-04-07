@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use App\Models\Image;
 
 class Character extends Model {
@@ -19,10 +20,10 @@ class Character extends Model {
     ];
 
     public function generateAuthToken (): string {
-        $this->auth_token = str_replace("$", "", substr(sha1(
+        $this->auth_token = Str::slug(str_replace("$", "", substr(sha1(
                             mt_rand()),10,10) . 
                             password_hash($this->nick, PASSWORD_DEFAULT) . 
-                            substr(sha1(mt_rand()),10,10));
+                            substr(sha1(mt_rand()),10,10)));
         $this->save();
         return $this->auth_token;
     }

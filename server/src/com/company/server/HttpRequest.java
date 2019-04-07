@@ -3,7 +3,10 @@ package com.company.server;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.Iterator;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.*;
 
 public class HttpRequest {
 
@@ -28,13 +31,10 @@ public class HttpRequest {
                 } else if (i == 1) {
                     this.parseHostData(inputLine);
                 } else {
-                    System.out.println(inputLine);
-                    this.requestHeaders.add(inputLine.split(":"));
+                    this.requestHeaders.add(inputLine.split(":", 2));
                 }
                 i = i + 1;
             }
-
-            this.loadHeaders();
         } catch (IOException exception) {
             exception.printStackTrace();
         }
@@ -57,6 +57,31 @@ public class HttpRequest {
         }
     }
 
+    public Object data (String index) {
+        String[] indexChunks = index.split("/");
+        try {
+            Object data = new JSONParser().parse(this.getHeader("data"));
+            JSONObject jo = (JSONObject) data;
+            Object result = jo.get(indexChunks[0]);
+
+            if (indexChunks.length > 1 &&
+                result instanceof Map<?, ?>) {
+                Iterator<Map.Entry> iter = ((Map)jo.get(indexChunks[1])).entrySet().iterator();
+                while (iter.hasNext()) {
+                    Map.Entry pair = iter.next();
+                    System.out.println(pair.getKey() + " : " + pair.getValue());
+                    if (pair.getKey().equals(indexChunks[1])) {
+                        return pair.getValue();
+                    }
+                }
+            }
+
+            return result;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     private void parseHostData (String hostData) {
         String[] hostChunks = hostData.split(" ")[1].split(":");
         this.host = hostChunks[0];
@@ -70,10 +95,5 @@ public class HttpRequest {
         this.httpVersion = methodChunks[2];
     }
 
-    private void loadHeaders () {
-        this.host = this.getHeader("hostt");
-        //System.out.println(this.host);
-        //System.out.println(this.getHeader("method"));
-    }
 
 }

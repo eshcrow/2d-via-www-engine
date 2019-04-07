@@ -26,8 +26,8 @@ public class WorkerRunnable implements Runnable {
 
             long time = System.currentTimeMillis();
             this.httpRequest = new HttpRequest(input);
-            output.write(("HTTP/1.1 200 OK\n\nWorkerRunnable: " + this.serverText + " - " + time + "").getBytes());
-
+            output.write(("HTTP/1.1 200 OK\nContent-Type: text/html\n\nWorkerRunnable: - " + time + "").getBytes());
+            System.out.println(this.httpRequest.data("data/something"));
             this.httpRequest.inputStreamClose();
             output.close();
             System.out.println("Request processed: " + time);
