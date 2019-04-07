@@ -12,19 +12,26 @@ public class HttpRequest {
     protected BufferedReader inputStream;
     public String host;
     public String method;
+    public String path;
+    public String httpVersion;
+    public String port;
 
     public HttpRequest (BufferedReader inputStream) {
         this.inputStream = inputStream;
         String inputLine;
 
         try {
+            int i = 0;
             while (!(inputLine = this.inputStream.readLine()).equals("")) {
-                if (inputLine.indexOf("GET") != -1 ||
-                    inputLine.indexOf("POST") != -1) {
+                if (i == 0) {
                     this.parseMethodData(inputLine);
-                    continue;
+                } else if (i == 1) {
+                    this.parseHostData(inputLine);
+                } else {
+                    System.out.println(inputLine);
+                    this.requestHeaders.add(inputLine.split(":"));
                 }
-                this.requestHeaders.add(inputLine.split(":"));
+                i = i + 1;
             }
 
             this.loadHeaders();
@@ -42,22 +49,31 @@ public class HttpRequest {
         return null;
     }
 
-    private void parseMethodData (String methodData) {
-        // TODO: parsing method and URL
-    }
-
-    private void loadHeaders () {
-        this.host = this.getHeader("hostt");
-        //System.out.println(this.host);
-        //System.out.println(this.getHeader("method"));
-    }
-
     public void inputStreamClose () {
         try {
             this.inputStream.close();
         } catch (IOException exception) {
             exception.printStackTrace();
         }
+    }
+
+    private void parseHostData (String hostData) {
+        String[] hostChunks = hostData.split(" ")[1].split(":");
+        this.host = hostChunks[0];
+        this.port = hostChunks[1];
+    }
+
+    private void parseMethodData (String methodData) {
+        String[] methodChunks = methodData.split(" ");
+        this.method = methodChunks[0];
+        this.path = methodChunks[1];
+        this.httpVersion = methodChunks[2];
+    }
+
+    private void loadHeaders () {
+        this.host = this.getHeader("hostt");
+        //System.out.println(this.host);
+        //System.out.println(this.getHeader("method"));
     }
 
 }
