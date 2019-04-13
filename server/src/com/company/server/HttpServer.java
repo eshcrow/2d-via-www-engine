@@ -3,6 +3,7 @@ package com.company.server;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.IOException;
+import com.company.helpers.Log;
 
 public class HttpServer implements Runnable {
 
@@ -34,7 +35,7 @@ public class HttpServer implements Runnable {
                 throw new RuntimeException("Error accepting client connection", e);
             }
             new Thread(
-                    new WorkerRunnable(clientSocket, "Multithreaded Server")
+                    new WorkerRunnable(clientSocket)
             ).start();
         }
         System.out.println("Server Stopped.") ;
@@ -53,8 +54,9 @@ public class HttpServer implements Runnable {
     private void openServerSocket() {
         try {
             this.serverSocket = new ServerSocket(this.serverPort);
+            Log.sey("Server started at port " + this.serverPort, "GREEN", "");
         } catch (IOException e) {
-            throw new RuntimeException("Cannot open port 8080", e);
+            throw new RuntimeException("Cannot open port " + this.serverPort, e);
         }
     }
 

@@ -6,7 +6,7 @@ $dotenv->load();
 
 if (empty($_COOKIE['auth_token'])) {
     echo json_encode([
-        "error" => "Sesja wygasła. Zaloguj się ponownie na stronie głównej kienta gry."
+        "error" => "Sesja wygasła. Zaloguj się ponownie na stronie głównej klienta gry."
     ]);
     die();
 }
@@ -14,17 +14,16 @@ if (empty($_COOKIE['auth_token'])) {
 $url = 'http://127.0.0.1:666';
 $serverAuthToken = $_ENV['SERVER_AUTH_TOKEN'];
 $data = json_encode([
+    "server_auth_token" => $serverAuthToken,
     "player_auth_token" => $_COOKIE['auth_token'],
     "request" => "hui",
-    "data" => [
-        "something" => true
-    ]
+    "data" => "Jebać disa"
 ]);
 
 $context = stream_context_create(array(
     'http' => array(
         'method' => 'POST',
-        'header' => "Content-type: application/x-www-form-urlencoded\nauth: {$serverAuthToken}\ndata: {$data}",
+        'header' => "Content-type: application/x-www-form-urlencoded\ndata: {$data}",
         'timeout' => 60
     )
 ));

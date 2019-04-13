@@ -2,17 +2,17 @@ package com.company.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.Iterator;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.*;
+import org.json.simple.parser.JSONParser;
 
 public class HttpRequest {
 
-
     protected ArrayList<String[]> requestHeaders = new ArrayList();
     protected BufferedReader inputStream;
+    private Timestamp timestamp;
     public String host;
     public String method;
     public String path;
@@ -20,6 +20,7 @@ public class HttpRequest {
     public String port;
 
     public HttpRequest (BufferedReader inputStream) {
+        this.timestamp = new Timestamp(System.currentTimeMillis());
         this.inputStream = inputStream;
         String inputLine;
 
@@ -40,6 +41,14 @@ public class HttpRequest {
         }
     }
 
+    public Date getDate (){
+        return new Date(this.timestamp.getTime());
+    }
+
+    public Timestamp getTimestamp () {
+        return this.timestamp;
+    }
+
     public String getHeader (String name) {
         for (int i = 0; i < this.requestHeaders.size(); i++) {
             if (this.requestHeaders.get(i)[0].toLowerCase().equals(name)) {
@@ -58,23 +67,10 @@ public class HttpRequest {
     }
 
     public Object data (String index) {
-        String[] indexChunks = index.split("/");
         try {
             Object data = new JSONParser().parse(this.getHeader("data"));
             JSONObject jo = (JSONObject) data;
-            Object result = jo.get(indexChunks[0]);
-
-            if (indexChunks.length > 1 &&
-                result instanceof Map<?, ?>) {
-                Iterator<Map.Entry> iter = ((Map)jo.get(indexChunks[1])).entrySet().iterator();
-                while (iter.hasNext()) {
-                    Map.Entry pair = iter.next();
-                    System.out.println(pair.getKey() + " : " + pair.getValue());
-                    if (pair.getKey().equals(indexChunks[1])) {
-                        return pair.getValue();
-                    }
-                }
-            }
+            Object result = jo.get(index);
 
             return result;
         } catch (Exception e) {
