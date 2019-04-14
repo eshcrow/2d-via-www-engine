@@ -29,7 +29,7 @@ public class HttpServer implements Runnable {
                 clientSocket = this.serverSocket.accept();
             } catch (IOException e) {
                 if (this.isStopped) {
-                    System.out.println("Server Stopped.") ;
+                    Log.warning("Server Stopped.") ;
                     return;
                 }
                 throw new RuntimeException("Error accepting client connection", e);
@@ -38,7 +38,7 @@ public class HttpServer implements Runnable {
                     new WorkerRunnable(clientSocket)
             ).start();
         }
-        System.out.println("Server Stopped.") ;
+        Log.warning("Server Stopped.") ;
 
     }
 
@@ -54,7 +54,7 @@ public class HttpServer implements Runnable {
     private void openServerSocket() {
         try {
             this.serverSocket = new ServerSocket(this.serverPort);
-            Log.sey("Server started at port " + this.serverPort, "GREEN", "");
+            Log.success("Server started at port " + this.serverPort);
         } catch (IOException e) {
             throw new RuntimeException("Cannot open port " + this.serverPort, e);
         }

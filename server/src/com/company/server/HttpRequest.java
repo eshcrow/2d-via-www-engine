@@ -41,8 +41,8 @@ public class HttpRequest {
         }
     }
 
-    public Date getDate (){
-        return new Date(this.timestamp.getTime());
+    public String getDate (){
+        return new Date(this.timestamp.getTime()).toString();
     }
 
     public Timestamp getTimestamp () {
