@@ -1,4 +1,4 @@
-package com.company.server;
+package com.company.server.http;
 
 import java.net.ServerSocket;
 import java.net.Socket;

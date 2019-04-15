@@ -16,8 +16,8 @@ $serverAuthToken = $_ENV['SERVER_AUTH_TOKEN'];
 $data = json_encode([
     "server_auth_token" => $serverAuthToken,
     "player_auth_token" => $_COOKIE['auth_token'],
-    "request" => "hui",
-    "data" => "Jebać disa"
+    "request" => "init",
+    "data" => "dfgdfgfg"
 ]);
 
 $context = stream_context_create(array(
