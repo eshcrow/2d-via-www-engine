@@ -1,40 +1,43 @@
 package com.company.helpers;
 
 import com.company.server.http.Http;
+import com.company.helpers.json.JSON;
+import com.company.helpers.json.JSONArray;
 
 public class Pack {
 
     private Http http;
-    private Json events;
-    private Json data;
+    private JSONArray events;
+    private JSONArray data;
 
     /**
      * @param http {@link com.company.server.http.Http}
      */
     public Pack (Http http) {
         this.http = http;
-        this.events = new Json();
-        this.data = new Json();
+        this.events = new JSONArray();
+        this.data = new JSONArray();
     }
 
     public void pushEvents (String event) {
-        this.events.array(event).push();
+        this.events.add(event);
     }
 
     public void pushData (String data) {
-        this.data.array(data).push();
+        this.data.add(data);
     }
 
     public void send () {
 
-        Json json = new Json();
-        json.object("events", "sdsdsds").push();
-        //json.object("data", this.data.getArray()).push();
+        JSON json = new JSON();
+
+        json.push("events", this.events.get());
+        json.push("data", this.data.get());
 
         this.http.response().createHeader(
                 "200 OK",
                 "application/object",
-                json.getJson()
+                json.get()
         );
     }
 
