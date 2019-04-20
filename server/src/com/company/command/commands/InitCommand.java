@@ -5,6 +5,11 @@ import com.company.helpers.json.JSONArray;
 import com.company.server.http.Http;
 import com.company.helpers.Pack;
 import com.company.helpers.json.JSON;
+import com.company.drivers.database.DataBase;
+import java.sql.ResultSet;
+
+import java.sql.SQLException;
+import java.util.Date;
 
 public class InitCommand implements Command {
 
@@ -17,6 +22,22 @@ public class InitCommand implements Command {
     }
 
     public void execute () {
+        DataBase db = new DataBase();
+
+        ResultSet rs =  db.setTable("players").where(
+                "id", "="
+        ).or(
+                "nick", "="
+        ).select().setInt(1).setString("Arkasia").execute().results();
+
+        try {
+            while (rs.next()) {
+                System.out.println(rs.getString("nick"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         this.pack.pushEvents("init_hero");
         this.pack.pushEvents("init_map");
         this.pack.pushEvents("init_npc");
@@ -34,6 +55,8 @@ public class InitCommand implements Command {
                 "coords",
                 new JSONArray().add(
                         new JSONArray().add("21").add("37").get()
+                ).add(
+                        new JSONArray().add("11").add("77").get()
                 ).get()
                 );
         this.pack.pushData(heroData.get());

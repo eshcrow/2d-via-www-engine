@@ -1,11 +1,13 @@
 package com.company.server.http;
 
-import com.company.command.Command;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import com.company.helpers.Prop;
 import com.company.helpers.Log;
-// All commands
-import com.company.command.commands.BadRequestCommand;
-import com.company.command.commands.InitCommand;
+import com.company.command.Commands;
+import com.company.command.commands.UnauthorizedAccessCommand;
+
+import java.lang.reflect.Method;
 
 public class ProcessPlayerRequest {
 
@@ -19,21 +21,33 @@ public class ProcessPlayerRequest {
         if (this.checkRequestIsAuthenticated()) {
             this.executeCommand();
         }
-
     }
 
     private void executeCommand () {
 
-        Command command = new BadRequestCommand(this.http);
+        String commandClass = Commands.get(this.http.request().data("request"));
 
-        switch (this.http.request().data("request").toString()) {
-            case "init":
-                command = new InitCommand(this.http); break;
-            case "hui":
-                break;
+        if (commandClass == null)
+            commandClass = Commands.get("bad_request");
+
+        try {
+            Class command = Class.forName("com.company.command.commands." + commandClass);
+            Method executeMethod = command.getMethod("execute");
+            Class[] types = {
+                    this.http.getClass()
+            };
+            Constructor constructor = command.getConstructor(types);
+            Object[] params = {
+                    this.http
+            };
+            Object instance = constructor.newInstance(params);
+            executeMethod.invoke(instance);
         }
-
-        command.execute();
+        catch (ClassNotFoundException e) { e.printStackTrace(); }
+        catch (NoSuchMethodException e) { e.printStackTrace(); }
+        catch (InstantiationException e) { e.printStackTrace(); }
+        catch (IllegalAccessException e) { e.printStackTrace(); }
+        catch (InvocationTargetException e) { e.printStackTrace(); }
 
     }
 
@@ -44,10 +58,13 @@ public class ProcessPlayerRequest {
             Log.error("Method not allowed.");
             return false;
         } else if (
-                this.http.request().data("server_auth_token") == null ||
-                !this.http.request().data("server_auth_token").equals(this.properties.get("AUTH_TOKEN"))
+                this.http.request().data("cat") == null ||
+                !this.http.request().data("cat").equals(this.properties.get("AUTH_TOKEN"))
         ) {
-            this.http.response().makeUnauthorized();
+            if (this.http.request().method.equals("POST"))
+                new UnauthorizedAccessCommand(this.http);
+            else
+                this.http.response().makeUnauthorized();
             Log.warning("Unauthorized request.");
             return false;
         } else if (!this.http.request().path.equals("/")) {

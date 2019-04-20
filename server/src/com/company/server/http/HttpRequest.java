@@ -66,13 +66,13 @@ public class HttpRequest {
         }
     }
 
-    public Object data (String index) {
+    public String data (String index) {
         try {
             Object data = new JSONParser().parse(this.getHeader("data"));
             JSONObject jo = (JSONObject) data;
             Object result = jo.get(index);
 
-            return result;
+            return result.toString();
         } catch (Exception e) {
             return null;
         }
