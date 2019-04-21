@@ -13,6 +13,7 @@ package com.company;
 
 import com.company.server.http.HttpServer;
 import com.company.helpers.Prop;
+import com.company.server.game.GameServer;
 
 public class Server {
 
@@ -21,8 +22,16 @@ public class Server {
     public static void main(String[] args) {
         Prop properties = new Prop(PROPS_FILE);
 
-        HttpServer httpServer = new HttpServer(properties.getAsInt("PORT"));
+        GameServer gameServer = new GameServer();
+        new Thread(gameServer).start();
+
+        HttpServer httpServer = new HttpServer(
+                properties.getAsInt("PORT"),
+                gameServer
+        );
         new Thread(httpServer).start();
+
+        gameServer.setHttp(httpServer);
     }
 
 }

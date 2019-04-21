@@ -65,7 +65,7 @@ public class ProcessPlayerRequest {
                 new UnauthorizedAccessCommand(this.http);
             else
                 this.http.response().makeUnauthorized();
-            Log.warning("Unauthorized request.");
+            Log.warning("Unauthorized request. Are you sure that you set CAT (client auth token) correctly?");
             return false;
         } else if (!this.http.request().path.equals("/")) {
             this.http.response().makeUnauthorized();

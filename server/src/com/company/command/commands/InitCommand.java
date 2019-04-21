@@ -11,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 
+import com.company.drivers.database.Results;
+
 public class InitCommand implements Command {
 
     protected Http http;
@@ -24,18 +26,14 @@ public class InitCommand implements Command {
     public void execute () {
         DataBase db = new DataBase();
 
-        ResultSet rs =  db.setTable("players").where(
+        Results rs = db.setTable("players").where(
                 "id", "="
         ).or(
                 "nick", "="
         ).select().setInt(1).setString("Arkasia").execute().results();
 
-        try {
-            while (rs.next()) {
-                System.out.println(rs.getString("nick"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        while (rs.next()) {
+            //System.out.println(rs.getString("nick"));
         }
 
         this.pack.pushEvents("init_hero");

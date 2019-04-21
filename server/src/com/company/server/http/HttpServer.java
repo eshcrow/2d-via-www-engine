@@ -4,6 +4,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.IOException;
 import com.company.helpers.Log;
+import com.company.server.game.GameServer;
 
 public class HttpServer implements Runnable {
 
@@ -11,9 +12,11 @@ public class HttpServer implements Runnable {
     protected ServerSocket serverSocket = null;
     protected boolean isStopped = false;
     protected Thread runningThread = null;
+    public GameServer server;
 
-    public HttpServer (int port) {
+    public HttpServer (int port, GameServer server) {
         this.serverPort = port;
+        this.server = server;
     }
 
     public void run () {
@@ -24,12 +27,13 @@ public class HttpServer implements Runnable {
         openServerSocket();
 
         while (!this.isStopped) {
+
             Socket clientSocket = null;
             try {
                 clientSocket = this.serverSocket.accept();
             } catch (IOException e) {
                 if (this.isStopped) {
-                    Log.warning("Server Stopped.") ;
+                    Log.warning("HTTP server is stopped.") ;
                     return;
                 }
                 throw new RuntimeException("Error accepting client connection", e);
@@ -38,8 +42,7 @@ public class HttpServer implements Runnable {
                     new WorkerRunnable(clientSocket)
             ).start();
         }
-        Log.warning("Server Stopped.") ;
-
+        Log.warning("HTTP server has been stopped.") ;
     }
 
     public synchronized void stop(){
@@ -54,7 +57,7 @@ public class HttpServer implements Runnable {
     private void openServerSocket() {
         try {
             this.serverSocket = new ServerSocket(this.serverPort);
-            Log.success("Server started at port " + this.serverPort);
+            Log.success("HTTP Server started at port " + this.serverPort);
         } catch (IOException e) {
             throw new RuntimeException("Cannot open port " + this.serverPort, e);
         }

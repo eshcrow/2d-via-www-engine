@@ -9,7 +9,18 @@ import java.util.ArrayList;
 import java.sql.PreparedStatement;
 import com.company.helpers.Prop;
 import com.company.helpers.Str;
+import com.company.helpers.Log;
 
+/**
+ * Instruction:
+ * First set table:
+ * db.setTable("your_table")
+ * When you want results filtered by where do this like that
+ * db.where("col_name", "operator")...etc.select().setInt(1).execute().results()
+ * You get a object where you can manage your db results.
+ * When you want all results from table do this like that
+ * db.select().results()
+ */
 public class DataBase {
 
     private Connection connection;
@@ -18,7 +29,8 @@ public class DataBase {
     private PreparedStatement preparedStatement;
     private String[] selectColumn;
     private String tableName;
-    private ResultSet results;
+    private ResultSet resultsSet;
+    private Results results;
     private int preparedValuesAmount = 1;
 
     /**
@@ -67,7 +79,7 @@ public class DataBase {
 
         sql = sql + " FROM " + this.tableName;
 
-        if (this.where.size() > 0) {
+        if (this.whereHasValues()) {
             sql = sql + " WHERE";
 
             for (String i : this.where) {
@@ -76,7 +88,7 @@ public class DataBase {
 
         }
 
-        System.out.println(sql);
+        Log.info(sql);
 
         return sql;
     }
@@ -182,10 +194,10 @@ public class DataBase {
      */
     public DataBase select () {
         try {
-            if (this.where.size() > 0)
+            if (this.whereHasValues())
                 this.prepareStatement(this.queryBuild("SELECT"));
             else
-                this.results = this.statement.executeQuery(this.queryBuild("SELECT"));
+                this.resultsSet = this.statement.executeQuery(this.queryBuild("SELECT"));
 
             return this;
         } catch (SQLException e) {
@@ -216,22 +228,43 @@ public class DataBase {
         }
     }
 
-    public int count () {
+    public ResultSet getResultsSet () {
+        return this.resultsSet;
+    }
+
+    public Results results () {
+        if (this.resultsSet == null)
+            return null;
+
+        if (this.results == null)
+            this.results = new Results(this.resultsSet);
+
+        return this.results;
+    }
+
+    public ResultSet first () {
         try {
-            return this.results.getFetchSize();
+            this.resultsSet.first();
+            return this.resultsSet;
         } catch (SQLException e) {
             e.printStackTrace();
-            return 0;
+            return null;
         }
     }
 
-    public ResultSet results () {
-        return this.results;
+    public ResultSet last () {
+        try {
+            this.resultsSet.last();
+            return this.resultsSet;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public DataBase execute () {
         try {
-            this.results = this.preparedStatement.executeQuery();
+            this.resultsSet = this.preparedStatement.executeQuery();
             return this;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -245,6 +278,13 @@ public class DataBase {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * @return true if something is in where.
+     */
+    private Boolean whereHasValues () {
+        return this.where.size() > 0;
     }
 
 }
