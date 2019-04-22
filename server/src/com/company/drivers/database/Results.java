@@ -51,6 +51,14 @@ public class Results {
         return this.results.get(this.currentIndex).get(columnLabel);
     }
 
+    public byte getByte (String columnLabel) {
+        try {
+            return Byte.parseByte(this.getString(columnLabel));
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+
     public int getInt (String columnLabel) {
         try {
             return Integer.parseInt(this.getString(columnLabel));

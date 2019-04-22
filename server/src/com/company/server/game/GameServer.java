@@ -2,10 +2,12 @@ package com.company.server.game;
 
 import com.company.helpers.Log;
 import com.company.server.http.HttpServer;
+import com.company.player.Players;
 
 public class GameServer implements Runnable {
 
     public Boolean started = false;
+    public Players players;
     private HttpServer http;
 
     public GameServer () {

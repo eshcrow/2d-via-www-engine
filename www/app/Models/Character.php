@@ -8,6 +8,7 @@ use App\Models\Image;
 
 class Character extends Model {
 
+    public $timestamps = false;
     protected $table = "players";
     protected $fillable = [
         'user_id',

@@ -7,19 +7,19 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.sql.PreparedStatement;
+import java.util.List;
+
 import com.company.helpers.Prop;
 import com.company.helpers.Str;
 import com.company.helpers.Log;
+
 
 /**
  * Instruction:
  * First set table:
  * db.setTable("your_table")
  * When you want results filtered by where do this like that
- * db.where("col_name", "operator")...etc.select().setInt(1).execute().results()
- * You get a object where you can manage your db results.
- * When you want all results from table do this like that
- * db.select().results()
+ * db.where("int_col_name", "=").setInt(1).or("str_col_name", "!=").setStr("String").select().results()
  */
 public class DataBase {
 
@@ -28,10 +28,12 @@ public class DataBase {
     private ArrayList<String> where = new ArrayList();
     private PreparedStatement preparedStatement;
     private String[] selectColumn;
-    private String tableName;
+    private String tableName = "";
     private ResultSet resultsSet;
     private Results results;
-    private int preparedValuesAmount = 1;
+    private List<String> queue = new ArrayList<>();
+    private List<Integer> intValues = new ArrayList<>();
+    private List<String> strValues = new ArrayList<>();
 
     /**
      * Loading properties file with database connection data.
@@ -61,6 +63,7 @@ public class DataBase {
         } catch (ClassNotFoundException  e) {
             e.printStackTrace();
         }
+
     }
 
     /**
@@ -109,43 +112,6 @@ public class DataBase {
      * @param operator Condition operator.
      * @return DataBase
      *
-     * SQL WHERE condition.
-     */
-    public DataBase where (String columnName, String operator) {
-        return this.operation(columnName, operator);
-    }
-
-    /**
-     * @param columnName Column name in table
-     * @param operator Condition operator.
-     * @return DataBase
-     *
-     * SQL OR condition.
-     */
-    public DataBase or (String columnName, String operator) {
-        return this.operation("OR " + columnName, operator);
-    }
-
-    /**
-     * @param columnName Column name in table
-     * @param operator Condition operator.
-     * @return DataBase
-     *
-     * SQL AND condition.
-     */
-    public DataBase and (String columnName, String operator) {
-        return this.operation("AND " + columnName, operator);
-    }
-
-    public DataBase get () {
-        return this;
-    }
-
-    /**
-     * @param columnName Column name in table
-     * @param operator Condition operator.
-     * @return DataBase
-     *
      * Create string with column name and given operator and add it  to where list.
      */
     public DataBase operation (String columnName, String operator) {
@@ -179,10 +145,62 @@ public class DataBase {
      * @param column Column names.
      * @return DataBase
      *
-     * Here you can set what columns can be use in ResultSet.
+     * Here you can set what columns can be use in ResultSet in select operation.
      */
     public DataBase getOnly (String[] column) {
         this.selectColumn = column;
+        return this;
+    }
+
+    /**
+     * DOC FOR WHERE CONDITIONS BEGIN
+     *
+     * @param columnLabel name in database.
+     * @param operator Condition operator.
+     * @return DataBase
+     *
+     * All these methods are used to creating SQL where conditions.
+     * Where condition is created by method operation and DataBase object is returned.
+     */
+    public DataBase where (
+            String columnLabel,
+            String operator
+    ) {
+        return this.operation(columnLabel, operator);
+    }
+
+    public DataBase and (
+            String columnLabel,
+            String operator
+    ) {
+        return this.operation("AND " + columnLabel, operator);
+    }
+
+    public DataBase or (
+            String columnLabel,
+            String operator
+    ) {
+        return this.operation("OR " + columnLabel, operator);
+    }
+    /* DOC FOR WHERE CONDITIONS END */
+
+    /**
+     * @param value Integer value to condition.
+     * @return DataBase
+     */
+    public DataBase setInt (int value) {
+        this.queue.add("int");
+        this.intValues.add(value);
+        return this;
+    }
+
+    /**
+     * @param value String value to condition.
+     * @return DataBase
+     */
+    public DataBase setStr (String value) {
+        this.queue.add("str");
+        this.strValues.add(value);
         return this;
     }
 
@@ -194,9 +212,10 @@ public class DataBase {
      */
     public DataBase select () {
         try {
-            if (this.whereHasValues())
+            if (this.whereHasValues()) {
                 this.prepareStatement(this.queryBuild("SELECT"));
-            else
+                this.prepareStatements();
+            } else
                 this.resultsSet = this.statement.executeQuery(this.queryBuild("SELECT"));
 
             return this;
@@ -206,32 +225,42 @@ public class DataBase {
         }
     }
 
-    public DataBase setString (String value) {
+    /**
+     * Here all types from queue are related in conditions.
+     * Next values are allocated to intValues or strValues list.
+     * Next SQL request is executed and results are saved to resultsSet.
+     */
+    private void prepareStatements () {
         try {
-            this.preparedStatement.setString(this.preparedValuesAmount, value);
-            this.preparedValuesAmount++;
-            return this;
+            int preparedValues = 1;
+
+            for (String i : this.queue) {
+                if (i.equals("int")) {
+                    this.preparedStatement.setInt(preparedValues, this.intValues.get(0));
+                    this.intValues.remove(0);
+                } else if (i.equals("str")) {
+                    this.preparedStatement.setString(preparedValues, this.strValues.get(0));
+                    this.strValues.remove(0);
+                }
+                preparedValues++;
+            }
+
+            this.resultsSet = this.preparedStatement.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
         }
     }
 
-    public DataBase setInt (int value) {
-        try {
-            this.preparedStatement.setInt(this.preparedValuesAmount, value);
-            this.preparedValuesAmount++;
-            return this;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
+    /**
+     * @return resultSet object.
+     */
     public ResultSet getResultsSet () {
         return this.resultsSet;
     }
 
+    /**
+     * @return Result object.
+     */
     public Results results () {
         if (this.resultsSet == null)
             return null;
@@ -242,6 +271,9 @@ public class DataBase {
         return this.results;
     }
 
+    /**
+     * @return Move cursor to begin of result set.
+     */
     public ResultSet first () {
         try {
             this.resultsSet.first();
@@ -252,6 +284,9 @@ public class DataBase {
         }
     }
 
+    /**
+     * @return Move cursor to end of result set.
+     */
     public ResultSet last () {
         try {
             this.resultsSet.last();
@@ -262,16 +297,11 @@ public class DataBase {
         }
     }
 
-    public DataBase execute () {
-        try {
-            this.resultsSet = this.preparedStatement.executeQuery();
-            return this;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
+    /**
+     * @param sql String with sql conditions.
+     *
+     * Here is created statement based on your sql conditions.
+     */
     private void prepareStatement (String sql) {
         try {
             this.preparedStatement = this.connection.prepareStatement(sql);

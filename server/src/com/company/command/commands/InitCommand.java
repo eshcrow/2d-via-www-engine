@@ -11,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 
+import com.company.player.Player;
+
 import com.company.drivers.database.Results;
 
 public class InitCommand implements Command {
@@ -24,16 +26,25 @@ public class InitCommand implements Command {
     }
 
     public void execute () {
-        DataBase db = new DataBase();
 
-        Results rs = db.setTable("players").where(
-                "id", "="
-        ).or(
-                "nick", "="
-        ).select().setInt(1).setString("Arkasia").execute().results();
+        Player p = new Player();
+        p.id = 12;
+        Player s = p.test();
+
+        System.out.println(s.id);
+
+        DataBase db = new DataBase().
+                setTable("players").
+                where("id", "=").setInt(1).
+                and("nick", "=").setStr("Arkasia").
+                and("gender", "=").setInt(1).
+                or("nick", "=").setStr("Trzebu").getOnly(new String[]{"nick", "id"}).
+                select();
+
+        Results rs = db.results();
 
         while (rs.next()) {
-            //System.out.println(rs.getString("nick"));
+            System.out.println(rs.getString("nick"));
         }
 
         this.pack.pushEvents("init_hero");
