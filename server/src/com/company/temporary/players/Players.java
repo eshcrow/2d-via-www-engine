@@ -1,4 +1,6 @@
-package com.company.player;
+package com.company.temporary.players;
+
+import com.company.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +19,20 @@ public class Players {
     }
 
     private Player getFromDB (int id) {
-        return null;
+        Player player = new Player().where("id", "=").set(id).get().getFirst();
+        if (player != null)
+            this.players.add(player);
+        return player;
+    }
+
+    public boolean removeFromCache (int id) {
+        for (Player i : this.players) {
+            if (i.id == id) {
+                this.players.remove(i);
+                return true;
+            }
+        }
+        return false;
     }
 
     private Player getFromCache (int id) {

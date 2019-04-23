@@ -2,16 +2,19 @@ package com.company.server.game;
 
 import com.company.helpers.Log;
 import com.company.server.http.HttpServer;
-import com.company.player.Players;
+import com.company.temporary.images.Images;
+import com.company.temporary.players.Players;
 
 public class GameServer implements Runnable {
 
     public Boolean started = false;
     public Players players;
+    public Images images;
     private HttpServer http;
 
     public GameServer () {
-
+        this.players = new Players();
+        this.images = new Images();
     }
 
     public void run () {

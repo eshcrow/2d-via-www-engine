@@ -8,10 +8,9 @@ import com.company.server.game.GameServer;
 
 public class HttpServer implements Runnable {
 
-    protected int serverPort = 8080;
-    protected ServerSocket serverSocket = null;
-    protected boolean isStopped = false;
-    protected Thread runningThread = null;
+    private int serverPort;
+    private ServerSocket serverSocket = null;
+    private boolean isStopped = false;
     public GameServer server;
 
     public HttpServer (int port, GameServer server) {
@@ -21,13 +20,12 @@ public class HttpServer implements Runnable {
 
     public void run () {
         synchronized (this) {
-            this.runningThread = Thread.currentThread();
+            Thread runningThread = Thread.currentThread();
         }
 
         openServerSocket();
 
         while (!this.isStopped) {
-
             Socket clientSocket = null;
             try {
                 clientSocket = this.serverSocket.accept();
@@ -39,7 +37,10 @@ public class HttpServer implements Runnable {
                 throw new RuntimeException("Error accepting client connection", e);
             }
             new Thread(
-                    new WorkerRunnable(clientSocket)
+                    new WorkerRunnable(
+                            clientSocket,
+                            this.server
+                    )
             ).start();
         }
         Log.warning("HTTP server has been stopped.") ;

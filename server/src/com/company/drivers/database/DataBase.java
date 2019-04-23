@@ -31,9 +31,9 @@ public class DataBase {
     private String tableName = "";
     private ResultSet resultsSet;
     private Results results;
-    private List<String> queue = new ArrayList<>();
-    private List<Integer> intValues = new ArrayList<>();
-    private List<String> strValues = new ArrayList<>();
+    protected List<String> queue = new ArrayList<>();
+    protected List<Integer> intValues = new ArrayList<>();
+    protected List<String> strValues = new ArrayList<>();
 
     /**
      * Loading properties file with database connection data.
@@ -153,14 +153,10 @@ public class DataBase {
     }
 
     /**
-     * DOC FOR WHERE CONDITIONS BEGIN
-     *
+     * Create WHERE SQL condition.
      * @param columnLabel name in database.
      * @param operator Condition operator.
      * @return DataBase
-     *
-     * All these methods are used to creating SQL where conditions.
-     * Where condition is created by method operation and DataBase object is returned.
      */
     public DataBase where (
             String columnLabel,
@@ -169,6 +165,12 @@ public class DataBase {
         return this.operation(columnLabel, operator);
     }
 
+    /**
+     * Create AND SQL condition.
+     * @param columnLabel name in database.
+     * @param operator Condition operator.
+     * @return DataBase
+     */
     public DataBase and (
             String columnLabel,
             String operator
@@ -176,19 +178,24 @@ public class DataBase {
         return this.operation("AND " + columnLabel, operator);
     }
 
+    /**
+     * Create OR SQL condition.
+     * @param columnLabel name in database.
+     * @param operator Condition operator.
+     * @return DataBase
+     */
     public DataBase or (
             String columnLabel,
             String operator
     ) {
         return this.operation("OR " + columnLabel, operator);
     }
-    /* DOC FOR WHERE CONDITIONS END */
 
     /**
      * @param value Integer value to condition.
      * @return DataBase
      */
-    public DataBase setInt (int value) {
+    public DataBase set (int value) {
         this.queue.add("int");
         this.intValues.add(value);
         return this;
@@ -198,7 +205,7 @@ public class DataBase {
      * @param value String value to condition.
      * @return DataBase
      */
-    public DataBase setStr (String value) {
+    public DataBase set (String value) {
         this.queue.add("str");
         this.strValues.add(value);
         return this;

@@ -10,9 +10,6 @@ public class Pack {
     private JSONArray events;
     private JSONArray data;
 
-    /**
-     * @param http {@link com.company.server.http.Http}
-     */
     public Pack (Http http) {
         this.http = http;
         this.events = new JSONArray();
@@ -34,7 +31,7 @@ public class Pack {
         json.push("events", this.events.get());
         json.push("data", this.data.get());
 
-        this.http.response().createHeader(
+        this.http.response.createHeader(
                 "200 OK",
                 "application/object",
                 json.get()

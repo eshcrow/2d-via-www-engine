@@ -66,6 +66,14 @@ public class HttpRequest {
         }
     }
 
+    public int dataInt (String index) {
+        try {
+            return Integer.parseInt(this.data(index));
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+
     public String data (String index) {
         try {
             Object data = new JSONParser().parse(this.getHeader("data"));

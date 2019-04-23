@@ -2,14 +2,10 @@ package com.company.command.commands;
 
 import com.company.command.Command;
 import com.company.helpers.json.JSONArray;
-import com.company.server.http.Http;
+import com.company.server.game.Server;
 import com.company.helpers.Pack;
 import com.company.helpers.json.JSON;
 import com.company.drivers.database.DataBase;
-import java.sql.ResultSet;
-
-import java.sql.SQLException;
-import java.util.Date;
 
 import com.company.player.Player;
 
@@ -17,35 +13,48 @@ import com.company.drivers.database.Results;
 
 public class InitCommand implements Command {
 
-    protected Http http;
+    protected Server server;
     private Pack pack;
 
-    public InitCommand (Http http) {
-        this.http = http;
-        this.pack = new Pack(http);
+    public InitCommand (Server server) {
+        this.server = server;
+        this.pack = new Pack(server.http);
     }
 
     public void execute () {
 
-        Player p = new Player();
-        p.id = 12;
-        Player s = p.test();
+        System.out.println(this.server.game.images.get(1).file_name);
 
-        System.out.println(s.id);
+//        this.server.hero.nick = "ArkasiaxD";
+//
+//        System.out.println(this.server.game.players.get(1).nick);
 
-        DataBase db = new DataBase().
-                setTable("players").
-                where("id", "=").setInt(1).
-                and("nick", "=").setStr("Arkasia").
-                and("gender", "=").setInt(1).
-                or("nick", "=").setStr("Trzebu").getOnly(new String[]{"nick", "id"}).
-                select();
 
-        Results rs = db.results();
+//        Player c = new Player().where("nick", "=").set("Arkasia").get().getFirst();
+//
+//        c.last_action = System.currentTimeMillis();
+//
+//        System.out.println(c.nick);
+//        System.out.println(c.last_action);
 
-        while (rs.next()) {
-            System.out.println(rs.getString("nick"));
-        }
+
+//        while (c.next()) {
+//            System.out.println(c.getObject().nick);
+//        }
+
+//        DataBase db = new DataBase().
+//                setTable("players").
+//                where("id", "=").set(1).
+//                and("nick", "=").set("Arkasia").
+//                and("gender", "=").set(1).
+//                or("nick", "=").set("Trzebu").getOnly(new String[]{"nick", "id"}).
+//                select();
+//
+//        Results rs = db.results();
+
+//        while (rs.next()) {
+//            System.out.println(rs.getString("nick"));
+//        }
 
         this.pack.pushEvents("init_hero");
         this.pack.pushEvents("init_map");

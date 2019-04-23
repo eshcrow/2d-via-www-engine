@@ -7,7 +7,8 @@ public class Commands {
      */
     public static String[][] commands = {
             {"init", "InitCommand"},
-            {"bad_request", "BadRequestCommand"}
+            {"bad_request", "BadRequestCommand"},
+            {"session_expired", "SessionExpiredCommand"}
     };
 
     /**

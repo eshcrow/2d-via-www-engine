@@ -23,7 +23,7 @@ public class Results {
             while (resultSet.next()) {
                 Map<String, String> column = new HashMap<>();
 
-                for (int i = 1; i < resultSetMetaData.getColumnCount(); i++) {
+                for (int i = 1; i <= resultSetMetaData.getColumnCount(); i++) {
                     String columnName = resultSetMetaData.getColumnName(i);
                     column.put(
                             columnName,

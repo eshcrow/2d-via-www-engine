@@ -20,10 +20,7 @@ class GameController extends Controller {
                     ->with("status-error", "Postać której szukasz nie istnieje.");
         }
 
-        Cookie::queue("auth_token", $character_data->generateAuthToken(), 0);
-
-        $character_data->last_action = time(); 
-        $character_data->save(); 
+        Cookie::queue("auth_token", $character_data->generateAuthToken(), 0); 
 
         return redirect()->route("game.render");
     }

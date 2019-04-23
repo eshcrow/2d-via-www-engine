@@ -1,30 +1,30 @@
 package com.company.command.commands;
 
-import com.company.command.Command;
-import com.company.server.game.Server;
 import com.company.helpers.Pack;
 import com.company.helpers.json.JSON;
+import com.company.server.game.Server;
 
-
-public class BadRequestCommand implements Command {
+public class SessionExpiredCommand {
 
     protected Server server;
-    protected  Pack pack;
+    protected Pack pack;
 
-    public BadRequestCommand(Server server) {
+    public SessionExpiredCommand (Server server) {
         this.server = server;
         this.pack = new Pack(server.http);
+        this.execute();
     }
 
     public void execute () {
         this.pack.pushEvents("error");
         this.pack.pushData(
                 new JSON().push(
-                        "msg", "Client request to this server has been rejected because it have bad structure."
+                        "lvl", "1"
+                ).push(
+                        "msg", "Session expired. Log in again in game client home page."
                 ).get()
         );
         this.pack.send();
     }
-
 
 }

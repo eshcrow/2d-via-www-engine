@@ -2,23 +2,15 @@ package com.company.server.http;
 
 public class Http {
 
-    private HttpRequest httpRequest;
-    private HttpResponse httpResponse;
+    public HttpRequest request;
+    public HttpResponse response;
 
     public Http (
             HttpRequest httpRequest,
             HttpResponse httpResponse
     ) {
-        this.httpRequest = httpRequest;
-        this.httpResponse = httpResponse;
-    }
-
-    public HttpRequest request () {
-        return this.httpRequest;
-    }
-
-    public HttpResponse response () {
-        return this.httpResponse;
+        this.request = httpRequest;
+        this.response = httpResponse;
     }
 
 }

@@ -15,11 +15,13 @@ public class Player extends DataBaseModel <Player> implements TableName {
     public int y;
     public int lvl;
     public String auth_token;
-    public int last_action;
+    public long last_action;
 
     @Override
     public String setTableName () {
         return "players";
     }
+
+    public Player newInstance () { return new Player(); }
 
 }
