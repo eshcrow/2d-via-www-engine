@@ -1,20 +1,23 @@
 import Keyboard = require("Drivers/Keyboard");
 import Hero = require("Player/Hero");
 import Other = require("Player/Other");
+import Http = require("http/Http");
 
-class Main {
+class Engine {
 
-    protected hero: any;
-    protected other: Array<any>;
-    protected keyboard: any;
+    protected hero: Hero;
+    protected other: Array<Hero>;
+    protected keyboard: Keyboard;
+    protected http: Http;
 
     constructor () {
         this.keyboard = new Keyboard();
         this.hero = new Hero();
         this.keyboard.initialize();
-        this.hero.controll();
+        this.http = new Http(this);
+        this.http.sendRequest.send();
     }
 
 }
 
-let main = new Main();
+let engine: Engine = new Engine();

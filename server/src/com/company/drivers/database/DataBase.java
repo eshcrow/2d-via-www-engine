@@ -91,7 +91,7 @@ public class DataBase {
 
         }
 
-        Log.info(sql);
+        System.out.println(sql);
 
         return sql;
     }

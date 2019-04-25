@@ -28,21 +28,27 @@ public class ProcessPlayerRequest {
 
     private void executeCommand () {
 
-        String commandClass = Commands.get(this.server.http.request.data("request"));
+        String request = this.server.http.request.data("request");
+        String commandClass = Commands.get(request);
 
         int pid = this.server.http.request.dataInt("pid");
 
         Player hero = this.server.game.players.get(pid);
 
-        if (!hero.auth_token.equals(this.server.http.request.data("pat"))) {
+        if (hero == null) {
+            commandClass = Commands.get("character_no_exists");
+        } else if (!hero.authToken.equals(this.server.http.request.data("pat"))) {
             this.server.game.players.removeFromCache(pid);
             commandClass = Commands.get("session_expired");
         } else {
+            hero.lastAction = System.currentTimeMillis();
             this.server.hero = hero;
         }
 
         if (commandClass == null)
             commandClass = Commands.get("bad_request");
+        else
+            this.server.hero.lastRequest = request;
 
         try {
             Class command = Class.forName("com.company.command.commands." + commandClass);

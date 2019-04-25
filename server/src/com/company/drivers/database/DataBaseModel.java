@@ -1,6 +1,7 @@
 package com.company.drivers.database;
 
 import com.company.drivers.database.interfaces.TableName;
+import com.company.server.game.GameServer;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -15,6 +16,9 @@ public abstract class DataBaseModel <T extends DataBaseModel <T>> extends DataBa
     private int currentObjectIndex = -1;
     private int subclassAmount = 0;
 
+    /**
+     * Get subclass variables type and name and set it to subclassFields.
+     */
     public DataBaseModel () {
         Field[] fields = this.getClass().getFields();
 
@@ -32,10 +36,7 @@ public abstract class DataBaseModel <T extends DataBaseModel <T>> extends DataBa
             else
                 type = typeSplits[typeSplits.length - 1].toLowerCase();
 
-            if (nameSplits.length == 1)
-                name = nameSplits[0];
-            else
-                name = nameSplits[nameSplits.length - 1];
+            name = nameSplits[nameSplits.length - 1];
 
             this.subclassFields.add(
                     new String[] {
@@ -62,8 +63,13 @@ public abstract class DataBaseModel <T extends DataBaseModel <T>> extends DataBa
             T newSubclassObject = newInstance();
 
             for (String[] i : this.subclassFields) {
-                if (results.getString(i[0]) == null)
+                if (
+                        i[1].equals("private") ||
+                        i[1].equals("protected") ||
+                        results.getString(i[0]) == null
+                ) {
                     continue;
+                }
 
                 switch (i[1]) {
                     case "int":
@@ -82,6 +88,10 @@ public abstract class DataBaseModel <T extends DataBaseModel <T>> extends DataBa
         }
 
         return (T) this;
+    }
+
+    public void save () {
+
     }
 
     public int getSubclassAmount () {

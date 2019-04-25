@@ -4,12 +4,12 @@ import com.company.helpers.Pack;
 import com.company.helpers.json.JSON;
 import com.company.server.game.Server;
 
-public class SessionExpiredCommand {
+public class CharacterDoesNotExistsCommand {
 
     protected Server server;
     protected Pack pack;
 
-    public SessionExpiredCommand (Server server) {
+    public CharacterDoesNotExistsCommand (Server server) {
         this.server = server;
         this.pack = new Pack(server.http);
     }
@@ -20,7 +20,7 @@ public class SessionExpiredCommand {
                 new JSON().push(
                         "lvl", "1"
                 ).push(
-                        "msg", "Session expired. Log in again in game client home page."
+                        "msg", "Character you are searching for does not exists. Try login again."
                 ).get()
         );
         this.pack.send();

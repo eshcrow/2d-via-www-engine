@@ -32,6 +32,7 @@ $clientAuthToken = $_ENV['CLIENT_AUTH_TOKEN'];
  */
 
 $data = json_encode([
+    "client-lang" => "pl",
     "cat" => $clientAuthToken,
     "pat" => $_COOKIE['auth_token'],
     "pid" => 1,

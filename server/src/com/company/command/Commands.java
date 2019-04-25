@@ -8,7 +8,8 @@ public class Commands {
     public static String[][] commands = {
             {"init", "InitCommand"},
             {"bad_request", "BadRequestCommand"},
-            {"session_expired", "SessionExpiredCommand"}
+            {"session_expired", "SessionExpiredCommand"},
+            {"character_no_exists", "CharacterDoesNotExistsCommand"}
     };
 
     /**

@@ -1,12 +1,16 @@
 abstract class Player {
 
     protected element_id: string;
-    protected Outfit: any = {
+    public id: number;
+    public gender: number;
+    public lvl: number;
+    public nick: string;
+    public Outfit: any = {
         Src: "",
         Width: 0,
         Height: 0
     }
-    protected Position: any = {
+    public Position: any = {
         X: 0,
         Y: 0,
         Delta: {

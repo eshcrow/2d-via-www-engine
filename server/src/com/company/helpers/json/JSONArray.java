@@ -2,9 +2,11 @@
  * Very simple json objects encoder.
  * Created for only to Game Server services.
  *
+ * 2.1 int support.
+ *
  * @author  Simon Fox (Trzebu)
  * @url https://github.com/Trzebu/
- * @version 2.0
+ * @version 2.1
  * @since   2019-04-16
  */
 
@@ -27,7 +29,7 @@ public class JSONArray extends Brackets implements JSONInterface {
     public List<String> nodes = new ArrayList();
 
     /**
-     * @param value Value of the new json content.
+     * @param value String value of the new json content.
      * @return this object if you want to get js array after adding new key.
      */
     public JSONArray add (String value) {
@@ -40,6 +42,21 @@ public class JSONArray extends Brackets implements JSONInterface {
                 replacePattern,
                 new String[][] {
                         {"value", value}
+                }
+        ));
+
+        return this;
+    }
+
+    /**
+     * @param value Integer value of the new json content.
+     * @return this object if you want to get js array after adding new key.
+     */
+    public JSONArray add (int value) {
+        this.nodes.add(Str.replace(
+                ":value",
+                new String[][] {
+                        {"value", "" + value}
                 }
         ));
 

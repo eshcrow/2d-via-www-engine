@@ -11,14 +11,20 @@ public class GameServer implements Runnable {
     public Players players;
     public Images images;
     private HttpServer http;
+    private ServerLoop loop;
+    public long currentMicroTime;
 
     public GameServer () {
-        this.players = new Players();
+        this.players = new Players(this);
         this.images = new Images();
     }
 
     public void run () {
         this.started = true;
+        this.loop = new ServerLoop(this);
+
+        new Thread(this.loop).start();
+
         Log.success("Game Server started.");
     }
 

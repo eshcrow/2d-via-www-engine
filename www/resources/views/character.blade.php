@@ -83,6 +83,7 @@
                                 <th scope="col">Nick</th>
                                 <th scope="col">Poziom</th>
                                 <th scope="col">Edytuj</th>
+                                <th scope="col">Usuń</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -97,6 +98,11 @@
                                     <td>
                                         <a href="{{ route('character.edit', ['character_id' => $character->getId()]) }}">
                                             Edytuj
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('character.delete', ['character_id' => $character->getId(), 'token' => Session::token()]) }}">
+                                            Usuń
                                         </a>
                                     </td>
                                 </tr>

@@ -16,6 +16,23 @@ class CharacterController extends Controller {
                 );
     }
 
+    public function delete ($characterId, $token): object {
+        $this->checkToken($token);
+        
+        $character_data = Character::where("id", "=", $characterId)
+                            ->where("user_id", "=", Auth::user()->id)
+                            ->first();
+
+        if (!$character_data) {
+            return redirect()->route('character')
+                    ->with("character_no_exists", "Postać której szukasz nie istnieje.");
+        }
+
+        $character_data->delete();
+
+        return redirect()->back()->with("success", "Postać została usunięta.");
+    }
+
     public function editSave (Request $request, $character_id): object {
         $character_data = Character::where("id", "=", $character_id)
                             ->where("user_id", "=", Auth::user()->id)

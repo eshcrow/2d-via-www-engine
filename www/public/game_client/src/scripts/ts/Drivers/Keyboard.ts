@@ -85,7 +85,7 @@ class Keyboard {
         return this.use[key].pressed ? true : false;
     }
 
-    private keyDown (e): boolean {
+    private keyDown (e: any): boolean {
         const CODE: number = e.which || e.keyCode;
         const KEY: string = this.getKeyByCode(e, CODE);
         
@@ -102,7 +102,7 @@ class Keyboard {
         this.use[KEY].pressed = true;
     }
 
-    private keyUp (e): void {
+    private keyUp (e: any): void {
         const CODE: number = e.which || e.keyCode;
         const KEY = this.getKeyByCode(e, CODE);
         this.hold = false;
@@ -114,7 +114,7 @@ class Keyboard {
         }
     }
 
-    private getKeyByCode (e, code: number): string {
+    private getKeyByCode (e: any, code: number): string {
         if (this.keys[code]) {
             e.preventDefault();
             return this.keys[code];

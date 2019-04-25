@@ -16,16 +16,15 @@ import java.util.List;
 public interface JSONInterface {
 
     /**
-     * @value new list object.
      * this contain all json variables.
+     * @value new list object.
      */
     List<String> nodes = new ArrayList();
 
     /**
-     * @return String closed json object.
-     *
      * This method concatenates all values in nodes and close it in brackets.
      * After that this delete all values from nodes.
+     * @return String closed json object.
      */
     String get();
 

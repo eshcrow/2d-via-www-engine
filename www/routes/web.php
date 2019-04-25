@@ -41,6 +41,12 @@ Route::post('/character/edit/{character_id}', [
     'middleware' => ['auth']
 ]);
 
+Route::get('/character/delete/{character_id}/{token}', [
+    'uses' => '\App\Http\Controllers\CharacterController@delete',
+    'as' => 'character.delete',
+    'middleware' => ['auth']
+]);
+
 Route::get('/enter_game/{character_id}/{token}', [
     'uses' => '\App\Http\Controllers\GameController@enter',
     'as' => 'game.enter',
