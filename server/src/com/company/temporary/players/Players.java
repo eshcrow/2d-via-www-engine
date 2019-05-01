@@ -49,13 +49,22 @@ public class Players {
 
         while (playersIterator.hasNext()) {
             Player player = playersIterator.next();
+            player.timeGetOutGame = player.timeGetOutGame - this.server.properties.getAsInt("SERVER_TPS");
 
             long timeDiff = this.server.currentMicroTime - player.lastAction;
 
-            if (player.lastRequest.equals("init") && timeDiff < 5000)
+            if (
+                    player.lastRequest.equals("init") ||
+                    player.lastRequest.equals("extendInitTime") &&
+                    timeDiff < (this.server.properties.getAsInt("SERVER_MCI") * 1000)
+            ) {
                 continue;
+            }
 
-            if (timeDiff > 500) {
+            if (
+                    timeDiff > this.server.properties.getAsInt("SERVER_WPR") ||
+                    player.timeGetOutGame < 1000
+            ) {
                 player.lastAction = 0;
                 player.authToken = "";
                 player.save();

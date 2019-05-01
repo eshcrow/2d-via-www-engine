@@ -12,6 +12,7 @@ class EncryptCookies extends Middleware
      * @var array
      */
     protected $except = [
-        "auth_token"
+        "auth_token",
+        "pid"
     ];
 }

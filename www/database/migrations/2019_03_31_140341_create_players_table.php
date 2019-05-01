@@ -15,14 +15,14 @@ class CreatePlayersTable extends Migration
     {
         Schema::create('players', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('user_id');
+            $table->bigInteger('useId');
             $table->char('nick', 40);
-            $table->integer('outfit_id');
-            $table->integer('map_id');
+            $table->integer('outfitId');
+            $table->integer('mapId');
             $table->integer('x');
             $table->integer('y');
-            $table->char('auth_token', 100)->nullable();
-            $table->integer('last_action', 20)->nullable();
+            $table->char('authToken', 100)->nullable();
+            $table->integer('lastAction', 20)->nullable();
         });
     }
 

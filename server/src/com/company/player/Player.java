@@ -21,10 +21,14 @@ public class Player extends DataBaseModel <Player> implements TableName {
     public int baseIntellect;
     public String authToken;
     public long lastAction;
-    public String lastRequest;
+    public String lastRequest = "";
     private GameServer server;
-    
-    public Player (GameServer server) { this.server = server; }
+    public int timeGetOutGame;
+
+    public Player (GameServer server) {
+        this.server = server;
+        this.timeGetOutGame = this.server.properties.getAsInt("PLAYER_AFK") * 1000;
+    }
 
     @Override
     public String setTableName () {
@@ -35,6 +39,14 @@ public class Player extends DataBaseModel <Player> implements TableName {
 
     public String getOutfitFileName () {
         return this.server.images.get(this.outfitId).file_name;
+    }
+
+    public void extendInitializationTime () {
+        this.lastAction = this.server.currentMicroTime;
+    }
+
+    public void keepAlive () {
+        this.timeGetOutGame = this.server.properties.getAsInt("PLAYER_AFK") * 1000;
     }
 
     public String getAsJSON () {

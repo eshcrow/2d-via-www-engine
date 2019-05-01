@@ -15,7 +15,16 @@ class Engine {
         this.hero = new Hero();
         this.keyboard.initialize();
         this.http = new Http(this);
-        this.http.sendRequest.send();
+        this.http.sendRequest.send({
+            request: "init",
+            test: 123,
+            hui: "1212sd"
+        });
+
+        setInterval(() => {
+            this.http.sendRequest.send({request: "checkEvents"});
+        }, 250);
+
     }
 
 }

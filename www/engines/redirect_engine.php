@@ -4,13 +4,27 @@ require '../vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::create("../");
 $dotenv->load();
 
-if (empty($_COOKIE['auth_token'])) {
+if (
+    empty($_COOKIE['auth_token']) ||
+    empty($_COOKIE['pid'])
+) {
     echo json_encode([
         "events" => ["error"],
         "data" => [
             [
                 "lvl" => 1,
                 "msg" => "Session expired. Log in again in game client home page."
+            ]
+        ]
+    ]);
+    die();
+} else if (empty($_POST)) {
+    echo json_encode([
+        "events" => ["error"],
+        "data" => [
+            [
+                "lvl" => 2,
+                "msg" => "Too few arguments for server request."
             ]
         ]
     ]);
@@ -23,37 +37,39 @@ if (empty($_COOKIE['auth_token'])) {
  */
 
 $url = 'http://127.0.0.1:666';
-$clientAuthToken = $_ENV['CLIENT_AUTH_TOKEN'];
+$clientAuthToken = getenv('CLIENT_AUTH_TOKEN');
 
 /**
+ * @var client-lang Language selected by client
  * @var cat Client Auth Token
  * @var pat Player Auth Token
  * @var pid Player ID
  */
 
-$data = json_encode([
+$headers = [
     "client-lang" => "pl",
     "cat" => $clientAuthToken,
-    "pat" => $_COOKIE['auth_token'],
-    "pid" => 1,
-    "request" => "init",
-    "data" => "dfgdfgfg"
-]);
+    "pat" => sanitize($_COOKIE['auth_token']),
+    "pid" => sanitize($_COOKIE['pid'])
+];
 
-$context = stream_context_create(array(
-    'http' => array(
-        'method' => 'POST',
-        'header' => "Content-type: application/x-www-form-urlencoded\ndata: {$data}",
-        'timeout' => 60
-    )
-));
+$requestArguments = json_decode(file_get_contents('php://input'));
+
+foreach ($requestArguments as $key => $value) {
+    $sanitizedKey = sanitize($key);
+    $sanitizedValue = sanitize($value);
+
+    $headers[$sanitizedKey] = $sanitizedValue;
+}
+
+$headers = json_encode($headers);
 
 $curl = curl_init($url);
 
 curl_setopt($curl, CURLOPT_POST, 1);
 curl_setopt($curl, CURLOPT_HTTPHEADER, array(
     'Content-type: application/x-www-form-urlencoded',
-    "data: {$data}"
+    "data: {$headers}"
 ));
 curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
@@ -86,3 +102,7 @@ if ($status["http_code"] !== 200) {
 
 //echo "<pre>" , var_dump(curl_getinfo($curl)) , "</pre>";
 curl_close($curl);
+
+function sanitize ($value) {
+    return preg_replace('/[^\-\s\pN\pL]+/u', '', $value);
+}

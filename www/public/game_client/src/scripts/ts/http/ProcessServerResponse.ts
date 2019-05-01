@@ -13,7 +13,7 @@ class ProcessServerResponse {
             if (typeof this[data["events"][i]] !== "undefined") {
                 this[data["events"][i]](data["data"][i]);
             } else {
-                console.error("Method " + data["events"][i] + " does not exists.");
+                //console.error("Method " + data["events"][i] + " does not exists.");
             }
         }
     }
@@ -32,6 +32,8 @@ class ProcessServerResponse {
         hero.baseAgility = data["baseAgility"];
         hero.baseIntellect = data["baseIntellect"];
     }
+
+    public idle () : void { return; }
 
 }
 

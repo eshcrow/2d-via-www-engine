@@ -12,7 +12,7 @@ class CharacterController extends Controller {
     public function index (): object {
         return view('character')
                 ->with("characters", 
-                    Character::where("user_id", "=", Auth::user()->id)->get()
+                    Character::where("userId", "=", Auth::user()->id)->get()
                 );
     }
 
@@ -20,7 +20,7 @@ class CharacterController extends Controller {
         $this->checkToken($token);
         
         $character_data = Character::where("id", "=", $characterId)
-                            ->where("user_id", "=", Auth::user()->id)
+                            ->where("userId", "=", Auth::user()->id)
                             ->first();
 
         if (!$character_data) {
@@ -35,7 +35,7 @@ class CharacterController extends Controller {
 
     public function editSave (Request $request, $character_id): object {
         $character_data = Character::where("id", "=", $character_id)
-                            ->where("user_id", "=", Auth::user()->id)
+                            ->where("userId", "=", Auth::user()->id)
                             ->first();
 
         if (!$character_data) {
@@ -71,7 +71,7 @@ class CharacterController extends Controller {
 
     public function editView ($character_id): object {
         $character_data = Character::where("id", "=", $character_id)
-                            ->where("user_id", "=", Auth::user()->id)
+                            ->where("userId", "=", Auth::user()->id)
                             ->first();
 
         if (!$character_data) {
@@ -94,11 +94,11 @@ class CharacterController extends Controller {
         $outfit_id = DefaultOutfit::where("gender", "=", $request->gender)->first()->id;
 
         Character::create([
-            "user_id" => Auth::user()->id,
+            "userId" => Auth::user()->id,
             "nick" => $request->nick,
             "gender" => $request->gender,
-            "outfit_id" => $outfit_id,
-            "map_id" => env("START_MAP_ID"),
+            "outfitId" => $outfit_id,
+            "mapId" => env("START_MAP_ID"),
             "x" => env("START_X"),
             "y" => env("START_Y")
         ]);

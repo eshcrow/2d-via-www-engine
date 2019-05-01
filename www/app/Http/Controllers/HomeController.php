@@ -25,6 +25,6 @@ class HomeController extends Controller
      */
     public function index(): object {
         return view('home')
-                ->with("characters", Character::where("user_id", "=", Auth::user()->id)->orderBy("lvl", "desc")->get());
+                ->with("characters", Character::where("userId", "=", Auth::user()->id)->orderBy("lvl", "desc")->get());
     }
 }

@@ -58,3 +58,27 @@ Route::get('/game', [
     'as' => 'game.render',
     'middleware' => ['auth']
 ]);
+
+// World Editor
+
+Route::get('/world_edit', [
+    'uses' => '\App\Http\Controllers\WorldEdit\WorldEditController@indexPage',
+    'as' => 'world_edit',
+    'middleware' => ['auth', 'game_master']
+]);
+
+Route::get('/world_edit/terrain', [
+    'uses' => '\App\Http\Controllers\WorldEdit\TerrainController@renderToolPage',
+    'as' => 'world_edit.terrain',
+    'middleware' => ['auth', 'game_master']
+]);
+
+Route::post('/world_edit/terrain/get_tilesets', [
+    'uses' => '\App\Http\Controllers\WorldEdit\TerrainController@getTilesets',
+    'middleware' => ['auth', 'game_master']
+]);
+
+Route::post('/world_edit/terrain/upload_tileset', [
+    'uses' => '\App\Http\Controllers\WorldEdit\TerrainController@uploadTileset',
+    'middleware' => ['auth', 'game_master']
+]);

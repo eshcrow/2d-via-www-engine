@@ -1,0 +1,83 @@
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+#tilesets {
+    width: 20%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#terrain {
+    width: 80%;
+    height: 100%;
+    background: #392553;
+    overflow: scroll;
+}
+
+#manu {
+    width: 100%;
+    height: 10%;
+}
+
+#tilesets-list {
+    width: 100%;
+    height: 20%;
+    overflow-y: scroll;
+    border-top: 2px solid black;
+}
+
+#tileset {
+    width: 100%;
+    height: 70%;
+    background-image: url('../public/images/world_edit/transp_bg.png');
+    border-top: 2px solid black;
+    overflow: scroll;
+}
+
+ul {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    padding-left: 0;
+    margin-bottom: 0;
+    margin: 0;
+}
+
+ul > li {
+    position: relative;
+    display: block;
+    padding: .75rem 1.25rem;
+    margin-bottom: -1px;
+    background-color: #fff;
+    border: 1px solid rgba(0,0,0,.125);
+}
+
+ul > li.active {
+    z-index: 2;
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+ul > li.active:hover {
+    background: #007bff;
+    cursor: default;
+}
+
+ul > li:hover {
+    background: #f2f2f2;
+    cursor: pointer;
+}

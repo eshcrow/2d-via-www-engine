@@ -1,5 +1,6 @@
 /node_modules
 /public/hot
+/public/js/*.js
 /public/storage
 /public/game_client/src/scripts/js
 /storage/*.key

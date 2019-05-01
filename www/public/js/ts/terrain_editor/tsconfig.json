@@ -1,0 +1,8 @@
+{   
+    "compileOnSave": true,
+    "compilerOptions": {
+        "outFile": "../../TerrainEditor.js",
+        "watch": true,
+        "lib": ["es2015", "dom"]
+    }
+}

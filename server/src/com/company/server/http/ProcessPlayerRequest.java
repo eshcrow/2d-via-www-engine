@@ -51,7 +51,7 @@ public class ProcessPlayerRequest {
             this.server.hero.lastRequest = request;
 
         try {
-            Class command = Class.forName("com.company.command.commands." + commandClass);
+            Class<?> command = Class.forName("com.company.command.commands." + commandClass);
             Method executeMethod = command.getMethod("execute");
             Class[] types = {
                     this.server.getClass()

@@ -11,30 +11,30 @@ class Character extends Model {
     public $timestamps = false;
     protected $table = "players";
     protected $fillable = [
-        'user_id',
+        'userId',
         'nick',
         'gender',
-        'outfit_id',
-        'map_id',
+        'outfitId',
+        'mapId',
         'x',
         'y'
     ];
 
     public function generateAuthToken (): string {
-        $this->auth_token = Str::slug(str_replace("$", "", substr(sha1(
+        $this->authToken = Str::slug(str_replace("$", "", substr(sha1(
                             mt_rand()),10,10) . 
                             password_hash($this->nick, PASSWORD_DEFAULT) . 
                             substr(sha1(mt_rand()),10,10)));
         $this->save();
-        return $this->auth_token;
+        return $this->authToken;
     }
 
     public function getOutfit (): string {
-        return url("game_client/src/images/outfits/" . Image::where("id", "=", $this->outfit_id)->first()->file_name);
+        return url("game_client/src/images/outfits/" . Image::where("id", "=", $this->outfitId)->first()->file_name);
     }
 
     public function getOutfitImgId (): int {
-        return $this->outfit_id;
+        return $this->outfitId;
     }
 
     public function getLvl (): int {

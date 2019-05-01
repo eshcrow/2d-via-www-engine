@@ -9,7 +9,9 @@ public class Commands {
             {"init", "InitCommand"},
             {"bad_request", "BadRequestCommand"},
             {"session_expired", "SessionExpiredCommand"},
-            {"character_no_exists", "CharacterDoesNotExistsCommand"}
+            {"character_no_exists", "CharacterDoesNotExistsCommand"},
+            {"extendInitTime", "ExtendInitializationTimeCommand"},
+            {"checkEvents", "CheckEventsCommand"}
     };
 
     /**

@@ -1,6 +1,7 @@
 package com.company.server.game;
 
 import com.company.helpers.Log;
+import com.company.helpers.Prop;
 import com.company.server.http.HttpServer;
 import com.company.temporary.images.Images;
 import com.company.temporary.players.Players;
@@ -12,11 +13,13 @@ public class GameServer implements Runnable {
     public Images images;
     private HttpServer http;
     private ServerLoop loop;
+    public Prop properties;
     public long currentMicroTime;
 
     public GameServer () {
         this.players = new Players(this);
         this.images = new Images();
+        this.properties = new Prop("../server.properties");
     }
 
     public void run () {

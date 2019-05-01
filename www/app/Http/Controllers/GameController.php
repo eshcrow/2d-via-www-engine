@@ -13,14 +13,15 @@ class GameController extends Controller {
         $this->checkToken($token);
 
         $character_data = Character::where("id", "=", $character_id)
-                            ->where("user_id", "=", Auth::user()->id)->first();
+                            ->where("userId", "=", Auth::user()->id)->first();
 
         if (!$character_data) {
             return redirect()->route('home')
                     ->with("status-error", "Postać której szukasz nie istnieje.");
         }
 
-        Cookie::queue("auth_token", $character_data->generateAuthToken(), 0); 
+        Cookie::queue("auth_token", $character_data->generateAuthToken(), 0);
+        Cookie::queue("pid", $character_id, 0);
 
         return redirect()->route("game.render");
     }

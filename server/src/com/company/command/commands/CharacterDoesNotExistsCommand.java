@@ -1,10 +1,11 @@
 package com.company.command.commands;
 
+import com.company.command.Command;
 import com.company.helpers.Pack;
 import com.company.helpers.json.JSON;
 import com.company.server.game.Server;
 
-public class CharacterDoesNotExistsCommand {
+public class CharacterDoesNotExistsCommand implements Command {
 
     protected Server server;
     protected Pack pack;

@@ -38,8 +38,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function getPermissionName (): string {
-        return Permissions::where("id", "=", $this->permissions)->first()->name;
+    public function permissions (): Permissions {
+        return Permissions::where("id", "=", $this->permissions)->first();
     }
 
 }
