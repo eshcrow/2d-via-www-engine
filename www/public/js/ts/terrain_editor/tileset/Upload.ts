@@ -20,12 +20,13 @@ class Upload extends WindowInterface {
     }
 
     public showWindow () : void {
-        if (this.element !== undefined) {
+        if ($(".window-dialog").length() > 0) {
             return;
         }
         this.create(
             this.templates.getUploadForm(),
-            "terrainEditor.tilesets.upload.upload()"
+            "terrainEditor.tilesets.upload.upload()",
+            "Next"
         );
     }
 
@@ -44,13 +45,8 @@ class Upload extends WindowInterface {
 
             this.allowControll();
             this.tilesets.reloadTilesetsList();
-            this.showTilesetGrid();
+            this.close();
         })
-    }
-
-    private showTilesetGrid () : void {
-        this.close();
-        this.create(this.templates.getGrid(), "");
     }
 
 }

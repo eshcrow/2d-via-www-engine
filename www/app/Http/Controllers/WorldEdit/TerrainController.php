@@ -53,19 +53,7 @@ class TerrainController extends Controller {
             "fileName" => $file->getClientOriginalName()
         ]);
 
-        $imgSize = getimagesize($file);
-
         $file->move("game_client/src/images/tilesets", $file->getClientOriginalName());
-
-        for ($x = 0; $x < intval($imgSize[0] / 32); $x++) {
-            for ($y = 0; $y < intval($imgSize[1] / 32); $y++) {
-                Tile::create([
-                    "tilesetId" => $tileset->id,
-                    "x" => $x,
-                    "y" => $y
-                ]);
-            }
-        }
 
         return json_encode(["tilesetPath" => $tileset->fileName]);
     }

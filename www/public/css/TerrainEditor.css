@@ -10,20 +10,20 @@ html, body {
 }
 
 #tilesets {
-    width: 20%;
+    width: 318px;
     height: 100%;
     display: flex;
     flex-direction: column;
 }
 
 #terrain {
-    width: 80%;
+    width: 100%;
     height: 100%;
     background: #392553;
     overflow: scroll;
 }
 
-#manu {
+#menu {
     width: 100%;
     height: 10%;
 }
@@ -41,6 +41,7 @@ html, body {
     background-image: url('../public/images/world_edit/transp_bg.png');
     border-top: 2px solid black;
     overflow: scroll;
+    background-attachment: local;
 }
 
 ul {
@@ -80,4 +81,13 @@ ul > li.active:hover {
 ul > li:hover {
     background: #f2f2f2;
     cursor: pointer;
+}
+
+#tile-cursor {
+    width: 32px;
+    height: 32px;
+    top: 0;
+    left: 0;
+    border: 2px solid black;
+    position: relative;
 }
